@@ -1,0 +1,11 @@
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KolotreeWebApi.deps.json
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KolotreeWebApi.runtimeconfig.json
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KolotreeWebApi.runtimeconfig.dev.json
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KolotreeWebApi.dll
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KolotreeWebApi.pdb
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KolotreeWebApi.csprojAssemblyReference.cache
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KolotreeWebApi.csproj.CoreCompileInputs.cache
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KolotreeWebApi.AssemblyInfoInputs.cache
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KolotreeWebApi.AssemblyInfo.cs
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KolotreeWebApi.dll
+G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KolotreeWebApi.pdb
