@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace KolotreeWebApi.Models
 {
-    public class Report
+    public class Record
     {
         public User User { get; set; }
         public Project Project { get; set; }
         public int AssignedHours { get; set; }
-        public int SpentHours { get; set; }
+        public int SpentHours { get; set; }     
         public DateTime DateOfRecord { get; set; }
     }
 }

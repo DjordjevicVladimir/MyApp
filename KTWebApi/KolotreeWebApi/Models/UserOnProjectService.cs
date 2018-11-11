@@ -13,6 +13,12 @@ namespace KolotreeWebApi.Models
         {
             new UserOnProject(1, 1, 10),
             new UserOnProject(1, 2, 10),
+            new UserOnProject(1, 2, 10),
+            new UserOnProject(1, 2, -10),
+            new UserOnProject(1, 2, 20),
+            new UserOnProject(1, 2, -20),
+            new UserOnProject(1, 2, 50),
+            new UserOnProject(1, 2, -20),
             new UserOnProject(2, 2, 10),
             new UserOnProject(3, 1, 10),
             new UserOnProject(3, 2, 10),          

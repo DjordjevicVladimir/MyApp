@@ -13265,11 +13265,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\AKADEMIJA\\KTWebApi\\KolotreeWebApi\\KTWebApi.csproj",
+      "projectUniqueName": "G:\\MyApp\\MyApplication\\KTWebApi\\KolotreeWebApi\\KTWebApi.csproj",
       "projectName": "KTWebApi",
-      "projectPath": "G:\\AKADEMIJA\\KTWebApi\\KolotreeWebApi\\KTWebApi.csproj",
+      "projectPath": "G:\\MyApp\\MyApplication\\KTWebApi\\KolotreeWebApi\\KTWebApi.csproj",
       "packagesPath": "C:\\Users\\Vladimir\\.nuget\\packages\\",
-      "outputPath": "G:\\AKADEMIJA\\KTWebApi\\KolotreeWebApi\\obj\\",
+      "outputPath": "G:\\MyApp\\MyApplication\\KTWebApi\\KolotreeWebApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

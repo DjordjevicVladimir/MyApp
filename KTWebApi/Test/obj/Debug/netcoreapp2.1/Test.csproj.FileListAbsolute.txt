@@ -12,3 +12,17 @@ G:\AKADEMIJA\KolotreeWebApi\Test\obj\Debug\netcoreapp2.1\Test.AssemblyInfo.cs
 G:\AKADEMIJA\KolotreeWebApi\Test\obj\Debug\netcoreapp2.1\Test.csproj.CopyComplete
 G:\AKADEMIJA\KolotreeWebApi\Test\obj\Debug\netcoreapp2.1\Test.dll
 G:\AKADEMIJA\KolotreeWebApi\Test\obj\Debug\netcoreapp2.1\Test.pdb
+G:\MyApp\MyApplication\KTWebApi\Test\bin\Debug\netcoreapp2.1\Test.deps.json
+G:\MyApp\MyApplication\KTWebApi\Test\bin\Debug\netcoreapp2.1\Test.runtimeconfig.json
+G:\MyApp\MyApplication\KTWebApi\Test\bin\Debug\netcoreapp2.1\Test.runtimeconfig.dev.json
+G:\MyApp\MyApplication\KTWebApi\Test\bin\Debug\netcoreapp2.1\Test.dll
+G:\MyApp\MyApplication\KTWebApi\Test\bin\Debug\netcoreapp2.1\Test.pdb
+G:\MyApp\MyApplication\KTWebApi\Test\bin\Debug\netcoreapp2.1\KTWebApi.dll
+G:\MyApp\MyApplication\KTWebApi\Test\bin\Debug\netcoreapp2.1\KTWebApi.pdb
+G:\MyApp\MyApplication\KTWebApi\Test\obj\Debug\netcoreapp2.1\Test.csprojAssemblyReference.cache
+G:\MyApp\MyApplication\KTWebApi\Test\obj\Debug\netcoreapp2.1\Test.csproj.CoreCompileInputs.cache
+G:\MyApp\MyApplication\KTWebApi\Test\obj\Debug\netcoreapp2.1\Test.AssemblyInfoInputs.cache
+G:\MyApp\MyApplication\KTWebApi\Test\obj\Debug\netcoreapp2.1\Test.AssemblyInfo.cs
+G:\MyApp\MyApplication\KTWebApi\Test\obj\Debug\netcoreapp2.1\Test.csproj.CopyComplete
+G:\MyApp\MyApplication\KTWebApi\Test\obj\Debug\netcoreapp2.1\Test.dll
+G:\MyApp\MyApplication\KTWebApi\Test\obj\Debug\netcoreapp2.1\Test.pdb

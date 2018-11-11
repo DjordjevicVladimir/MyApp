@@ -9,3 +9,14 @@ G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.Asse
 G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.AssemblyInfo.cs
 G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.dll
 G:\AKADEMIJA\KolotreeWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.pdb
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KTWebApi.deps.json
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KTWebApi.runtimeconfig.json
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KTWebApi.runtimeconfig.dev.json
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KTWebApi.dll
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.0\KTWebApi.pdb
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.csprojAssemblyReference.cache
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.csproj.CoreCompileInputs.cache
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.AssemblyInfoInputs.cache
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.AssemblyInfo.cs
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.dll
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.0\KTWebApi.pdb

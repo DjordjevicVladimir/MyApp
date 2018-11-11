@@ -10,7 +10,10 @@ namespace KolotreeWebApi.Models
         List<Project> projects = new List<Project>
         {
             new Project{ ProjectId=1, Name = "Kolotree", Description = "adadadsdada"},
-            new Project{ProjectId = 2, Name="devtech", Description="dsjkkljakdaklj"}
+            new Project{ProjectId = 2, Name="devtech", Description="dsjkkljakdaklj"},
+                  new Project{ProjectId = 3, Name="endava", Description="dsjkkljakdaklj"},
+            new Project{ProjectId = 4, Name="bosch", Description="dsjkkljakdaklj"},
+            new Project{ProjectId = 5, Name="helloo", Description="dsjkkljakdaklj"}
         };
 
         public void AddProject(Project project)

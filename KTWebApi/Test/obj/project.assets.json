@@ -13279,11 +13279,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\AKADEMIJA\\KTWebApi\\Test\\Test.csproj",
+      "projectUniqueName": "G:\\MyApp\\MyApplication\\KTWebApi\\Test\\Test.csproj",
       "projectName": "Test",
-      "projectPath": "G:\\AKADEMIJA\\KTWebApi\\Test\\Test.csproj",
+      "projectPath": "G:\\MyApp\\MyApplication\\KTWebApi\\Test\\Test.csproj",
       "packagesPath": "C:\\Users\\Vladimir\\.nuget\\packages\\",
-      "outputPath": "G:\\AKADEMIJA\\KTWebApi\\Test\\obj\\",
+      "outputPath": "G:\\MyApp\\MyApplication\\KTWebApi\\Test\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13302,8 +13302,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "G:\\AKADEMIJA\\KTWebApi\\KolotreeWebApi\\KTWebApi.csproj": {
-              "projectPath": "G:\\AKADEMIJA\\KTWebApi\\KolotreeWebApi\\KTWebApi.csproj"
+            "G:\\MyApp\\MyApplication\\KTWebApi\\KolotreeWebApi\\KTWebApi.csproj": {
+              "projectPath": "G:\\MyApp\\MyApplication\\KTWebApi\\KolotreeWebApi\\KTWebApi.csproj"
             }
           }
         }

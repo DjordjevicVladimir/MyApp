@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v2.1": {
       "Test/1.0.0": {
         "dependencies": {
-          "KolotreeWebApi": "1.0.0"
+          "KTWebApi": "1.0.0"
         },
         "runtime": {
           "Test.dll": {}
@@ -3936,13 +3936,13 @@
           }
         }
       },
-      "KolotreeWebApi/1.0.0": {
+      "KTWebApi/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.All": "2.0.9",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.0.4"
         },
         "runtime": {
-          "KolotreeWebApi.dll": {}
+          "KTWebApi.dll": {}
         }
       }
     }
@@ -6074,7 +6074,7 @@
       "path": "windowsazure.storage/8.1.4",
       "hashPath": "windowsazure.storage.8.1.4.nupkg.sha512"
     },
-    "KolotreeWebApi/1.0.0": {
+    "KTWebApi/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
