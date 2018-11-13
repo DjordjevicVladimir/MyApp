@@ -7,41 +7,55 @@ namespace KolotreeWebApi.Models
 {
     public class ProjectService
     {
-        List<Project> projects = new List<Project>
-        {
-            new Project{ ProjectId=1, Name = "Kolotree", Description = "adadadsdada"},
-            new Project{ProjectId = 2, Name="devtech", Description="dsjkkljakdaklj"},
-                  new Project{ProjectId = 3, Name="endava", Description="dsjkkljakdaklj"},
-            new Project{ProjectId = 4, Name="bosch", Description="dsjkkljakdaklj"},
-            new Project{ProjectId = 5, Name="helloo", Description="dsjkkljakdaklj"}
-        };
+        private readonly KolotreeContext db;
 
-        public void AddProject(Project project)
+        public ProjectService(KolotreeContext _db)
         {
-            if (project != null)
+            db = _db;
+        }
+
+        public bool AddProject(Project project)
+        {
+            try
             {
-                projects.Add(project);                
+                db.Projects.Add(project);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
         public Project FindProject(int id)
         {
-            return projects.FirstOrDefault(p => p.ProjectId == id);
+            return db.Projects.FirstOrDefault(p => p.ProjectId == id);
         }
 
-        public void UpdateProject(Project project)
+        public bool UpdateProject(Project project)
         {
-            Project oldProject = projects.FirstOrDefault(p => p.ProjectId == project.ProjectId);
-            if (oldProject != null)
+            Project oldProject = db.Projects.FirstOrDefault(p => p.ProjectId == project.ProjectId);
+            if (oldProject == null)
             {
-                oldProject.Name = project.Name;
-                oldProject.Description = project.Description;            
-            }           
+                return false;
+            }
+            oldProject.Name = project.Name;
+            oldProject.Description = project.Description;
+            try
+            {
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public List<Project> FetchAllProjects()
         {
-            return projects;
+            return db.Projects.ToList();
         }
     }
 }

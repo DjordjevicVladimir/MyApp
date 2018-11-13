@@ -1,0 +1,1 @@
+﻿{"ContextClassName":"KolotreeContext","DefaultDacpacSchema":null,"IdReplace":false,"IncludeConnectionString":true,"OutputPath":"Models","ProjectRootNamespace":"KTWebApi","SelectedToBeGenerated":0,"Tables":["dbo.HoursRecords","dbo.Project","dbo.User"],"UseDatabaseNames":false,"UseFluentApiOnly":false,"UseHandleBars":false,"UseInflector":true}

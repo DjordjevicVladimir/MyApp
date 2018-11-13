@@ -7,37 +7,53 @@ namespace KolotreeWebApi.Models
 {
     public class UserService
     {
-        public  List<User> userList = new List<User> {
-            new User{ UserId = 1, UserName= "Vlada", FullName = "Vlada" },
-            new User{ UserId = 2, UserName= "aca", FullName = "aca"},
-            new User{ UserId = 3, UserName= "nikola", FullName = "nikola"}
-        };
+        private readonly KolotreeContext db;
 
+        public UserService(KolotreeContext _db)
+        {
+            db = _db;
+        }
         public  List<User> FetchAllUsers()
         {
-            return userList;
+            return db.Users.ToList();
         }
 
         public User FindUser(int id)
         {
-            return userList.FirstOrDefault(u => u.UserId == id);
+            return db.Users.FirstOrDefault(u => u.UserId == id);
         }
 
-        public void AddUser(User user)
+        public bool AddUser(User user)
         {
-            if (user != null)
+            try
             {
-                userList.Add(user);
-            }          
+                db.Users.Add(user);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public void UpdateUser(User user)
+        public bool UpdateUser(User user)
         {
-            User oldUser = userList.FirstOrDefault(u => u.UserId == user.UserId);
-            if (oldUser != null)
+            User oldUser = db.Users.FirstOrDefault(u => u.UserId == user.UserId);
+            if (oldUser == null)
             {
-                oldUser.UserName = user.UserName;
-                oldUser.FullName = user.FullName;                
+                return false;             
+            }
+            oldUser.UserName = user.UserName;
+            oldUser.FullName = user.FullName;
+            try
+            {
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

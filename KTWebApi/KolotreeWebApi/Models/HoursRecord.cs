@@ -1,33 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KolotreeWebApi.Models
 {
-    public class HoursRecord
+    [Table("HoursRecord")]
+    public partial class HoursRecord
     {
+
+        public int Id { get; set; }
+        [Required]
         public int ProjectId { get; set; }
+        [Required]
         public int UserId { get; set; }
         public int AssignedHours { get; set; }
         public int SpentHours { get; set; }
-        public DateTime Date { get; private set; }      
+        [Column(TypeName = "date")]
+        public DateTime Date { get; private set; }
 
-       public HoursRecord(int userId, int projecId)
-       {
-            ProjectId = projecId;
-            UserId = userId;   
-            Date = DateTime.Now;
-       }
+        [ForeignKey("ProjectId")]
+        [InverseProperty("HoursRecords")]
+        public Project Project { get; set; }
+        [ForeignKey("UserId")]
+        [InverseProperty("HoursRecords")]
+        public User User { get; set; }
 
-    public HoursRecord(int userId, int projecId, int assignedHours, int spentHours)
+        public HoursRecord(int userId, int projectId)
         {
-            ProjectId = projecId;
             UserId = userId;
-            AssignedHours = assignedHours;
-            SpentHours = spentHours;
-            Date = DateTime.Now;
+            ProjectId = projectId;
+            Date = DateTime.Now.Date;
         }
-
     }
 }

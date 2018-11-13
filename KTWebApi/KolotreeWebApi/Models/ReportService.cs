@@ -7,46 +7,41 @@ using System.Threading.Tasks;
 namespace KolotreeWebApi.Models
 {
     public class ReportService
-    {
+    {     
 
-        private UserService userService = new UserService();
-        private ProjectService projectService = new ProjectService();
-        private HoursRecordService userOnProjectService = new HoursRecordService();
+        private readonly KolotreeContext db;
+        private readonly UserService userService;
+        private readonly ProjectService projectService;
+        private readonly HoursRecordService hoursRecordService;
+        
 
-        private List<SimpleProjectReport> GetSimpleProjectReports(IEnumerable<HoursRecord> userOnProjectList)
+        public ReportService(KolotreeContext _db, UserService _userService, ProjectService _projectService, HoursRecordService _hoursRecordService)
         {
-            if (userOnProjectList == null)
-            {
-                return new List<SimpleProjectReport>();
-            }
-            List<SimpleProjectReport> projectsForUser = new List<SimpleProjectReport>();
-            HashSet<Project> projects = new HashSet<Project>();
-            foreach (var rec in userOnProjectList)
-            {
-                Project p = projectService.FindProject(rec.ProjectId);
-                if (projects.Contains(p))
-                {
-                    SimpleProjectReport existingProject = projectsForUser.FirstOrDefault(pr => pr.Project.ProjectId == p.ProjectId);
-                  
-                        existingProject.AssignedHours += rec.AssignedHours;
-                   
-                        existingProject.SpentHours += rec.SpentHours;
-                   
-                    existingProject.TotalHours = existingProject.AssignedHours - existingProject.SpentHours;
-                }
-                else
-                {                   
-                    projects.Add(p);
-                    SimpleProjectReport newProject = new SimpleProjectReport();
-                    newProject.Project = p;                    
-                    newProject.AssignedHours = rec.AssignedHours;                  
-                    newProject.SpentHours = rec.SpentHours;                    
-                    newProject.TotalHours = newProject.AssignedHours - newProject.SpentHours;
-                    projectsForUser.Add(newProject);
-                }                
-            }            
-            return projectsForUser;
+            db = _db;
+            userService = _userService;
+            projectService = _projectService;
+            hoursRecordService = _hoursRecordService;
         }
+
+        private List<SimpleProjectReport> GetSimpleProjectReports(IEnumerable<HoursRecord> hoursRecords)
+        {
+            if (hoursRecords == null)
+            {
+                return null;
+            }
+            List<SimpleProjectReport> resultReport = new List<SimpleProjectReport>();
+            var recordsGroupedByProject = hoursRecords.GroupBy(r => r.Project);
+
+            foreach (var group in recordsGroupedByProject)
+            {
+                var report = new SimpleProjectReport();
+                report.Project = group.Key;
+                report.AssignedHours = group.Sum(r => r.AssignedHours);
+                report.SpentHours = group.Sum(r => r.SpentHours);
+                resultReport.Add(report);
+            }
+            return resultReport;
+        }      
 
                       
         public ReportPerUser GetReportPerUser(User user,  DateTime? fromDate = null, DateTime? toDate = null )
@@ -61,21 +56,22 @@ namespace KolotreeWebApi.Models
             {
                 return new ReportPerUser();
             }
-            IEnumerable<HoursRecord> userOnProjectList = userOnProjectService.recordsList
-               .Where(us => (us.UserId == user.UserId) && 
+            IEnumerable<HoursRecord> userOnProjectList = hoursRecordService.hoursRecords
+               .Where(us => (us.UserId == user.UserId) &&
                (us.Date >= startDate && us.Date <= endDate));
-            ReportPerUser report = new ReportPerUser();
-            report.User = user;
-            report.Projects = GetSimpleProjectReports(userOnProjectList);
-            foreach (var project in report.Projects)
+          
+            ReportPerUser resultReport = new ReportPerUser();
+            resultReport.User = user;
+            resultReport.Projects = GetSimpleProjectReports(userOnProjectList);
+            foreach (var project in resultReport.Projects)
             {
-                report.TotalAssignedHours += project.AssignedHours;
-                report.TotalSpentHours += project.SpentHours;
+                resultReport.TotalAssignedHours += project.AssignedHours;
+                resultReport.TotalSpentHours += project.SpentHours;
             }
-            report.TotalHours = report.TotalAssignedHours - report.TotalSpentHours;
-            report.FromDate = startDate;
-            report.ToDate = endDate;
-            return report;
+            resultReport.TotalHours = resultReport.TotalAssignedHours - resultReport.TotalSpentHours;
+            resultReport.FromDate = startDate;
+            resultReport.ToDate = endDate;
+            return resultReport;
         }
 
         public ReportPerUserOnProject GetReportPerUserOnProject(User user,Project project, DateTime? fromDate = null, DateTime? toDate = null)
@@ -95,7 +91,7 @@ namespace KolotreeWebApi.Models
                 return new ReportPerUserOnProject();
             }
 
-            IEnumerable<HoursRecord> userOnProjectList = userOnProjectService.recordsList
+            IEnumerable<HoursRecord> userOnProjectList = hoursRecordService.hoursRecords
                 .Where(us => (us.UserId == user.UserId) && (us.ProjectId == project.ProjectId) &&
                 (us.Date >= startDate && us.Date <= endDate));
             ReportPerUserOnProject report = new ReportPerUserOnProject();
@@ -110,37 +106,27 @@ namespace KolotreeWebApi.Models
             return report;
         }
 
-        private List<SimpleUserReport> GetSimpleUserReports(IEnumerable<HoursRecord> userOnProjectList)
+        private List<SimpleUserReport> GetSimpleUserReports(IEnumerable<HoursRecord> hoursRecords)
         {
-            if (userOnProjectList == null)
+            if (hoursRecords == null)
             {
-                return new List<SimpleUserReport>();
+                return null;
             }
-            List<SimpleUserReport> usersOnProject = new List<SimpleUserReport>();
-            HashSet<User> users = new HashSet<User>();
-            foreach (var rec in userOnProjectList)
+            List<SimpleUserReport> resultReport = new List<SimpleUserReport>();
+            var recordsGroupedByUser = hoursRecords.GroupBy(r => r.User);
+
+            foreach (var group in recordsGroupedByUser)
             {
-                User user = userService.FindUser(rec.UserId);
-                if (users.Contains(user))
-                {
-                    SimpleUserReport existingUserOnProject = usersOnProject.FirstOrDefault(u => u.User.UserId == user.UserId);
-                    existingUserOnProject.AssignedHours += rec.AssignedHours;
-                    existingUserOnProject.SpentHours += rec.SpentHours;
-                    existingUserOnProject.TotalHours = existingUserOnProject.AssignedHours - existingUserOnProject.SpentHours;
-                }
-                else
-                {
-                    users.Add(user);
-                    SimpleUserReport newUserOnProject = new SimpleUserReport();
-                    newUserOnProject.User = user;
-                    newUserOnProject.AssignedHours = rec.AssignedHours;
-                    newUserOnProject.SpentHours = rec.SpentHours ;
-                    newUserOnProject.TotalHours = newUserOnProject.AssignedHours - newUserOnProject.SpentHours;
-                    usersOnProject.Add(newUserOnProject);
-                }
+                SimpleUserReport report = new SimpleUserReport();
+                report.User = group.Key;
+                report.AssignedHours = group.Sum(r => r.AssignedHours);
+                report.SpentHours = group.Sum(r => r.SpentHours);
+                resultReport.Add(report);
             }
-            return usersOnProject;
+            return resultReport;
         }
+
+        
 
         public ReportPerProject GetReportPerProject(Project project, DateTime? fromDate = null, DateTime? toDate = null)
         {
@@ -157,7 +143,7 @@ namespace KolotreeWebApi.Models
 
             ReportPerProject resultReport = new ReportPerProject();
             resultReport.Project = project;
-            IEnumerable<HoursRecord> recordHoursList = userOnProjectService.recordsList
+            IEnumerable<HoursRecord> recordHoursList = hoursRecordService.hoursRecords
                .Where(r => (r.ProjectId == project.ProjectId) &&
                (r.Date >= startDate && r.Date <= endDate));
             resultReport.Users = GetSimpleUserReports(recordHoursList);
@@ -182,7 +168,7 @@ namespace KolotreeWebApi.Models
                 return new SumProjectsReport();
             }            
             SumProjectsReport resultReport = new SumProjectsReport();
-            IEnumerable<HoursRecord> recordHours = userOnProjectService.recordsList
+            IEnumerable<HoursRecord> recordHours = hoursRecordService.hoursRecords
                 .Where(r => (r.Date >= startDate) && (r.Date <= endDate));
             resultReport.Projects = GetSimpleProjectReports(recordHours);
             foreach (var project in resultReport.Projects)
@@ -207,7 +193,7 @@ namespace KolotreeWebApi.Models
                 return new SumUsersReport();
             }
             SumUsersReport resultReport = new SumUsersReport();
-            IEnumerable<HoursRecord> recordHours = userOnProjectService.recordsList
+            IEnumerable<HoursRecord> recordHours = hoursRecordService.hoursRecords
                .Where(r => (r.Date >= startDate) && (r.Date <= endDate));
             resultReport.users = GetSimpleUserReports(recordHours);
             foreach (var user in resultReport.users)
