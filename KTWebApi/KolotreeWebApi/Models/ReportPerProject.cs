@@ -7,13 +7,15 @@ namespace KolotreeWebApi.Models
 {
     public class ReportPerProject
     {
+        
         public Project Project { get; set; }
+        public List<SimpleUserReport> Users { get; set; }
+        public int TotalAssignedHours { get; set; }
+        public int TotalSpentHours { get; set; }
+        public int TotalHours { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public List<UserForProject> UsersForProject { get; set; }
-        public int TotalSpentHours { get; set; }
-        public int TotalAssignedHours { get; set; }
-        public int TotalHours { get; set; }
 
+        
     }
 }
