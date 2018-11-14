@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KolotreeWebApi.Models
 {
@@ -9,8 +10,8 @@ namespace KolotreeWebApi.Models
     {
        
         private readonly KolotreeContext db;
-        public List<HoursRecord> hoursRecords { get { return db.HoursRecords.ToList(); } private set { } }
 
+        public List<HoursRecord> hoursRecords { get { return db.HoursRecords.ToList(); } private set { } }
 
 
         public HoursRecordService(KolotreeContext _db)

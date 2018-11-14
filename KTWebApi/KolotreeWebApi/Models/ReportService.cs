@@ -208,5 +208,71 @@ namespace KolotreeWebApi.Models
         }
 
 
+        public ReportPerUsersSpentHoursRecords GetUsersSpentHoursRecords(User user, DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            if (userService.FindUser(user.UserId) == null)
+            {
+                return new ReportPerUsersSpentHoursRecords();
+            }
+            DateTime startDate = fromDate ?? new DateTime(2000, 01, 01);
+            DateTime endDate = toDate ?? DateTime.Now;
+            if (fromDate > toDate)
+            {
+                return new ReportPerUsersSpentHoursRecords();
+            }
+            IEnumerable<HoursRecord> hoursRecords = hoursRecordService.hoursRecords
+                .Where(r => (r.User == user) && (r.Date >= startDate && r.Date <= endDate));
+            ReportPerUsersSpentHoursRecords resultReport = new ReportPerUsersSpentHoursRecords();
+            resultReport.User = user;
+            foreach (var rec in hoursRecords)
+            {
+                var record = new ReportPerUsersSpentHoursRecords.SpentHoursRecord();
+                record.Project = rec.Project;
+                if (rec.SpentHours > 0)
+                {
+                    record.SpentHours = rec.SpentHours;
+                }
+                record.DateOfRecord = rec.Date;
+                resultReport.spentHoursRecords.Add(record);
+            }
+            resultReport.FromDate = startDate;
+            resultReport.ToDate = endDate;
+            return resultReport;
+        }
+
+        public ReportPerProjectRecords GetReportPerProjectRecords(Project project, DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            DateTime startDate = fromDate ?? new DateTime(2000, 01, 01);
+            DateTime endDate = toDate ?? DateTime.Now;
+            if (fromDate > toDate)
+            {
+                return new ReportPerProjectRecords();
+            }
+            if (projectService.FindProject(project.ProjectId) == null)
+            {
+                return new ReportPerProjectRecords();
+            }
+            ReportPerProjectRecords resultReport = new ReportPerProjectRecords();
+            resultReport.Project = project;
+            IEnumerable<HoursRecord> recordHoursList = hoursRecordService.hoursRecords
+               .Where(r => (r.ProjectId == project.ProjectId) &&
+               (r.Date >= startDate && r.Date <= endDate));
+            foreach (var rec in recordHoursList)
+            {
+                var record = new ReportPerProjectRecords.SpentHoursRecord();
+                record.User = rec.User;
+                if (rec.SpentHours > 0)
+                {
+                    record.SpentHours = rec.SpentHours;
+                }
+                record.DateOfRecord = rec.Date;
+                resultReport.spentHoursRecords.Add(record);
+            }
+            resultReport.FromDate = startDate;
+            resultReport.ToDate = endDate;
+            return resultReport;
+        }
+
+
     }
 }
