@@ -28,9 +28,9 @@ namespace KolotreeWebApi
         {
             services.AddDbContext<KolotreeContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConncection")));
-            services.AddScoped<UserService>();
-            services.AddScoped<ProjectService>();
-            services.AddScoped<HoursRecordService>();
+            services.AddTransient<UserService>();
+            services.AddTransient<ProjectService>();
+            services.AddTransient<HoursRecordService>();
             services.AddMvc();
         }
 

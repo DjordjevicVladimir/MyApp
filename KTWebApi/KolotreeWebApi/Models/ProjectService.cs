@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,48 +15,39 @@ namespace KolotreeWebApi.Models
             db = _db;
         }
 
-        public bool AddProject(Project project)
+        public async Task<List<Project>> FetchAllProjects()
         {
-            try
-            {
-                db.Projects.Add(project);
-                db.SaveChanges();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return await db.Projects.ToListAsync();
         }
 
-        public Project FindProject(int id)
+        public async  Task<Project> FindProject(int id)
         {
-            return db.Projects.FirstOrDefault(p => p.ProjectId == id);
+            return await db.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
         }
 
-        public bool UpdateProject(Project project)
+
+        public async Task AddProject(Project project)
+        {
+            db.Projects.Add(project);
+            await db.SaveChangesAsync();                   
+        }
+
+       
+
+        public async Task UpdateProject(Project project)
         {
             Project oldProject = db.Projects.FirstOrDefault(p => p.ProjectId == project.ProjectId);
-            if (oldProject == null)
-            {
-                return false;
-            }
             oldProject.Name = project.Name;
             oldProject.Description = project.Description;
-            try
-            {
-                db.SaveChanges();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            await db.SaveChangesAsync();           
         }
 
-        public List<Project> FetchAllProjects()
+
+        public async Task DeleteProject(Project project)
         {
-            return db.Projects.ToList();
-        }
+            db.Projects.Remove(project);
+            await db.SaveChangesAsync();
+            
+        }       
     }
 }

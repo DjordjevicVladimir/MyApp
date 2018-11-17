@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,54 +8,55 @@ namespace KolotreeWebApi.Models
 {
     public class UserService
     {
-        private readonly KolotreeContext db;
+        private readonly KolotreeContext db;       
 
         public UserService(KolotreeContext _db)
         {
             db = _db;
         }
-        public  List<User> FetchAllUsers()
-        {
-            return db.Users.ToList();
+
+
+        public  async Task<List<User>> FetchAllUsers()
+        {           
+            return  await db.Users.ToListAsync();
         }
 
-        public User FindUser(int id)
+
+        public async Task<User> FindUser(int id)
         {
-            return db.Users.FirstOrDefault(u => u.UserId == id);
+            return await db.Users.FirstOrDefaultAsync(u => u.UserId == id);
         }
 
-        public bool AddUser(User user)
+
+        public  async Task AddUser(User user)
         {
-            try
-            {
-                db.Users.Add(user);
-                db.SaveChanges();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+             db.Users.Add(user);
+            await db.SaveChangesAsync();                           
         }
 
-        public bool UpdateUser(User user)
+        public async void UpdateUser(User user)
         {
-            User oldUser = db.Users.FirstOrDefault(u => u.UserId == user.UserId);
-            if (oldUser == null)
-            {
-                return false;             
-            }
+            User oldUser = await db.Users.FirstOrDefaultAsync(u => u.UserId == user.UserId);          
             oldUser.UserName = user.UserName;
-            oldUser.FullName = user.FullName;
-            try
+            oldUser.FullName = user.FullName;            
+            await db.SaveChangesAsync();         
+       
+        }
+
+        public async Task DeleteUser(User user)
+        {
+                     
+            List<HoursRecord> hoursRecords = user.HoursRecords.ToList();
+            if (hoursRecords != null)
             {
-                db.SaveChanges();
-                return true;
+                foreach (var record in hoursRecords)
+                {
+                    db.HoursRecords.Remove(record);
+                }
             }
-            catch (Exception)
-            {
-                return false;
-            }
+
+            db.Users.Remove(user);
+           await db.SaveChangesAsync();     
         }
     }
 }
