@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using KolotreeWebApi.Models.Reports;
 
 
 namespace KolotreeWebApi
@@ -26,13 +27,13 @@ namespace KolotreeWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<KolotreeContext>(options =>
+            services.AddDbContext<KolotreeDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConncection")));
             services.AddTransient<UserService>();
             services.AddTransient<ProjectService>();
             services.AddTransient<HoursRecordService>();
             services.AddTransient<ReportService>();
-            services.AddMvc().AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); ;
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

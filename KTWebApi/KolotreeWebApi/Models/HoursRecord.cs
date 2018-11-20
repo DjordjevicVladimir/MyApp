@@ -9,22 +9,16 @@ namespace KolotreeWebApi.Models
     public partial class HoursRecord
     {
 
-        public int Id { get; private set; }
+        public int Id { get; set; }
         [Required]
-        public int ProjectId { get; set; }
+        public Project Project { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public User User { get; set; }
         public int AssignedHours { get; set; }
         public int SpentHours { get; set; }
-        [Column(TypeName = "date")]
+        [DataType(DataType.Date)]   
         public DateTime Date { get; private set; }
 
-        [ForeignKey("ProjectId")]
-        [InverseProperty("HoursRecords")]
-        public Project Project { get; set; }
-        [ForeignKey("UserId")]
-        [InverseProperty("HoursRecords")]
-        public User User { get; set; }
 
         public HoursRecord()
         {

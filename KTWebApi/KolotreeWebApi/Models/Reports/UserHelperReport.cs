@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KolotreeWebApi.Models
+namespace KolotreeWebApi.Models.Reports
 {
-    public class SimpleUserReport
+    public class UserHelperReport
     {
         public User User { get; set; }
         public int AssignedHours { get; set; }
         public int SpentHours { get; set; }
-        public int TotalHours { get; set; }
+        public int AvailableHours { get; set; }
     }
 }

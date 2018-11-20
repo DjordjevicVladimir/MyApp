@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using KolotreeWebApi.Models;
 using Newtonsoft.Json;
+using KolotreeWebApi.Models.Reports;
+
 
 namespace KolotreeWebApi.Controllers
 {
@@ -44,19 +46,19 @@ namespace KolotreeWebApi.Controllers
                 return NotFound("Ending date of report has to be greater than starting date");
             }
 
-            ReportPerUser resultReport = await reportService.GetReportPerUser(user, startDate, endDate);      
+            UserReport resultReport = await reportService.GetUserReport(user, startDate, endDate);      
             return Ok(resultReport);            
         }
 
-        [HttpGet]
-        [Route("[action]/{userId}/{projectId}")]
-        public async Task<IActionResult> GetReportForUserOnProject(int userId, int projectId)
-        {
-            User user = await userService.FindUser(userId);
-            Project project = await projectService.FindProject(projectId);
-            var result = await reportService.GetReportPerUserOnProject(user, project);
-            return Ok(project.Name);
-        }
+        //[HttpGet]
+        //[Route("[action]/{userId}/{projectId}")]
+        //public async Task<IActionResult> GetReportForUserOnProject(int userId, int projectId)
+        //{
+        //    User user = await userService.FindUser(userId);
+        //    Models.Project project = await projectService.FindProject(projectId);
+        //    var result = await reportService.GetReportForUserOnProject(user, project);
+        //    return Ok(project.Name);
+        //}
 
     }  
 }

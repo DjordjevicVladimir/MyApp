@@ -15,14 +15,26 @@ namespace KolotreeWebApi.Controllers
         private readonly HoursRecordService hoursRecordService;
         private readonly UserService userService;
         private readonly ProjectService projectService;
-        
+
         public HoursRecordController(HoursRecordService _hoursService, UserService _userService, ProjectService _projectService)
         {
             hoursRecordService = _hoursService;
             userService = _userService;
             projectService = _projectService;
-        }      
+        }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            HoursRecord record = await hoursRecordService.GetRacord(id);
+            if (record == null)
+            {
+                return NotFound();
+            }
+            return Ok(record);
+        }
+
+      
         // POST: api/HoursRecord
         [HttpPost]
         [Route("[action]")]
@@ -36,16 +48,17 @@ namespace KolotreeWebApi.Controllers
             Project project = await projectService.FindProject(hoursRecord.ProjectId);
             if (project == null)
             {
-                ModelState.AddModelError("User", "The project is not found");
+                ModelState.AddModelError("Project", "The project is not found");
             }
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             try
             {                              
-                await hoursRecordService.AddAssignedHoursToUserForProject(hoursRecord);
-                return StatusCode(201);
+                HoursRecord record = await hoursRecordService.AddAssignedHoursToUserForProject(hoursRecord);
+                return Created($"Get/{record.Id}", record);
             }
             catch (Exception xcp)
             {
@@ -67,7 +80,7 @@ namespace KolotreeWebApi.Controllers
             Project project = await projectService.FindProject(hoursRecord.ProjectId);
             if (project == null)
             {
-                ModelState.AddModelError("User", "The project is not found");
+                ModelState.AddModelError("Project", "The project is not found");
             }
             if (!ModelState.IsValid)
             {
@@ -75,8 +88,8 @@ namespace KolotreeWebApi.Controllers
             }
             try
             {
-                await hoursRecordService.RemoveAssignedHoursToUserForProject(hoursRecord);
-                return StatusCode(201);
+                HoursRecord record = await hoursRecordService.RemoveAssignedHoursToUserForProject(hoursRecord);
+                return Created($"Get/{record.Id}", record);
             }
             catch (Exception xcp)
             {
@@ -96,22 +109,21 @@ namespace KolotreeWebApi.Controllers
             Project project = await projectService.FindProject(hoursRecord.ProjectId);
             if (project == null)
             {
-                ModelState.AddModelError("User", "The project is not found");
-            }
-           
-            int availableHours = await hoursRecordService.CheckAvailableHoursForUserOnProject(user, project);
-            if (availableHours < hoursRecord.Hours)
-            {
-                ModelState.AddModelError("Hours", "There is no enough available hours for the user on the project. Please add him more assigned hours first.");
+                ModelState.AddModelError("Project", "The project is not found");
             }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            int availableHours = await hoursRecordService.CheckAvailableHoursForUserOnProject(user, project);
+            if (availableHours < hoursRecord.Hours)
+            {
+                ModelState.AddModelError("Hours", "There is no enough available hours for the user on the project. Please add him more assigned hours first.");
+            }          
             try
             {
-                await hoursRecordService.AddSpentHoursToUserForProject(hoursRecord);
-                return StatusCode(201);
+                HoursRecord record = await hoursRecordService.AddSpentHoursToUserForProject(hoursRecord);
+                return Created($"Get/{record.Id}", record);
             }
             catch (Exception xcp)
             {

@@ -47,7 +47,7 @@ namespace KolotreeWebApi.Controllers
         
         // POST: api/Users
         [HttpPost]        
-        public async Task<IActionResult> CreateUser([FromBody]User user)
+        public async Task<IActionResult> CreateUser([FromBody]UserForManipulation user)
         {
             if (!ModelState.IsValid)
             {
@@ -55,8 +55,8 @@ namespace KolotreeWebApi.Controllers
             }
             try
             {
-                await userService.AddUser(user);
-                return CreatedAtRoute("GetUser", new { id = user.UserId }, user);
+                User newUser = await userService.AddUser(user);
+                return Created($"GetUser/{newUser.UserId}",newUser);
             }
             catch (Exception xcp)
             {
@@ -67,7 +67,7 @@ namespace KolotreeWebApi.Controllers
         
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody]UserForUpdate user)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody]UserForManipulation user)
         {
             User oldUser = await userService.FindUser(id);
             if (oldUser == null)

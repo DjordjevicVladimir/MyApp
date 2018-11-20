@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KolotreeWebApi.Models
 {
-    public class UserForUpdate
+    public class UserForManipulation
     {
         [Required]
         [StringLength(50)]

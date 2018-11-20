@@ -30,7 +30,7 @@ namespace KolotreeWebApi.Controllers
         }
 
         // GET: api/Project/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetProject(int id)
         {
             Project project = await projectService.FindProject(id);
@@ -43,7 +43,7 @@ namespace KolotreeWebApi.Controllers
         
         // POST: api/Project
         [HttpPost]
-        public async Task<IActionResult> CreateProject([FromBody]Project project)
+        public async Task<IActionResult> CreateProject([FromBody]ProjectForManipulation project)
         {
             if (!ModelState.IsValid)
             {
@@ -51,8 +51,8 @@ namespace KolotreeWebApi.Controllers
             }
             try
             {
-                await projectService.AddProject(project);
-                return CreatedAtRoute("Get", new { id = project.ProjectId }, project);
+                Project newProject = await projectService.AddProject(project);
+                return Created($"Get/{newProject.ProjectId}", newProject);
             }
             catch (Exception xcp)
             {
@@ -62,7 +62,7 @@ namespace KolotreeWebApi.Controllers
         
         // PUT: api/Project/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProject(int id, [FromBody]ProjectForUpdate project)
+        public async Task<IActionResult> UpdateProject(int id, [FromBody]ProjectForManipulation project)
         {
             Project oldProject = await projectService.FindProject(id);
             if ( oldProject == null)

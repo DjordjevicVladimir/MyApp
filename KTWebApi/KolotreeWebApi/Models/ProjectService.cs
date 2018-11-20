@@ -8,45 +8,54 @@ namespace KolotreeWebApi.Models
 {
     public class ProjectService
     {
-        private readonly KolotreeContext db;
+        private readonly KolotreeDbContext db;
 
-        public ProjectService(KolotreeContext _db)
+        public ProjectService(KolotreeDbContext _db)
         {
             db = _db;
         }
+
+
 
         public async Task<List<Project>> FetchAllProjects()
         {
             return await db.Projects.ToListAsync();
         }
 
-        public async  Task<Project> FindProject(int id)
+        public Project FindProjectSinh(int id)
+        {
+            return db.Projects.FirstOrDefault(p => p.ProjectId == id);
+        }
+
+        public async Task<Project> FindProject(int id)
         {
             return await db.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
         }
 
 
-        public async Task AddProject(Project project)
+        public async Task<Project> AddProject(ProjectForManipulation project)
         {
-            db.Projects.Add(project);
-            await db.SaveChangesAsync();                   
+            Project newProject = new Project { Name = project.Name, Description = project.Description };
+            db.Projects.Add(newProject);
+            await db.SaveChangesAsync();
+            return newProject;
         }
 
-       
 
-        public async Task UpdateProject(ProjectForUpdate project, Project oldProject)
+
+        public async Task UpdateProject(ProjectForManipulation project, Project oldProject)
         {
             oldProject.Name = project.Name;
             oldProject.Description = project.Description;
-            await db.SaveChangesAsync();           
+            await db.SaveChangesAsync();
         }
 
 
         public async Task DeleteProject(Project project)
         {
-            db.Projects.Remove(project);
-            await db.SaveChangesAsync();
-            
-        }       
+            //db.Projects.Remove(project);
+            //await db.SaveChangesAsync();
+
+        }
     }
 }

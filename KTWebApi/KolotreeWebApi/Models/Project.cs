@@ -8,19 +8,13 @@ namespace KolotreeWebApi.Models
     [Table("Project")]
     public partial class Project
     {
-        public Project()
-        {
-            HoursRecords = new HashSet<HoursRecord>();
-        }
-
-        public int ProjectId { get; private set; }
+        public int ProjectId { get; set; }
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
         [Required]
+        [StringLength(300)]
         public string Description { get; set; }
 
-        [InverseProperty("Project")]
-        public ICollection<HoursRecord> HoursRecords { get; set; }
     }
 }

@@ -8,12 +8,9 @@ namespace KolotreeWebApi.Models
     [Table("User")]
     public partial class User
     {
-        public User()
-        {
-            HoursRecords = new HashSet<HoursRecord>();
-        }
+        
 
-        public int UserId { get; private set; }
+        public int UserId { get; set; }
         [Required]
         [StringLength(50)]
         public string UserName { get; set; }
@@ -21,7 +18,5 @@ namespace KolotreeWebApi.Models
         [StringLength(50)]
         public string FullName { get; set; }
 
-        [InverseProperty("User")]
-        public ICollection<HoursRecord> HoursRecords { get; set; }
     }
 }

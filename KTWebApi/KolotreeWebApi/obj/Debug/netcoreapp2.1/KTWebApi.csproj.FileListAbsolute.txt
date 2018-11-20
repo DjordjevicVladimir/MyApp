@@ -1,0 +1,15 @@
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.1\KTWebApi.deps.json
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.1\KTWebApi.runtimeconfig.json
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.1\KTWebApi.runtimeconfig.dev.json
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.1\KTWebApi.dll
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\bin\Debug\netcoreapp2.1\KTWebApi.pdb
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.csprojAssemblyReference.cache
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.csproj.CoreCompileInputs.cache
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.RazorAssemblyInfo.cache
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.RazorAssemblyInfo.cs
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.AssemblyInfoInputs.cache
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.AssemblyInfo.cs
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.RazorTargetAssemblyInfo.cache
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.dll
+G:\MyApp\MyApplication\KTWebApi\KolotreeWebApi\obj\Debug\netcoreapp2.1\KTWebApi.pdb
