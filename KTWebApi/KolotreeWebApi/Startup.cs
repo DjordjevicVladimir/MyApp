@@ -31,7 +31,8 @@ namespace KolotreeWebApi
             services.AddTransient<UserService>();
             services.AddTransient<ProjectService>();
             services.AddTransient<HoursRecordService>();
-            services.AddMvc();
+            services.AddTransient<ReportService>();
+            services.AddMvc().AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

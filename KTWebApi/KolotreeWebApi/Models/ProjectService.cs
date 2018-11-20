@@ -34,9 +34,8 @@ namespace KolotreeWebApi.Models
 
        
 
-        public async Task UpdateProject(Project project)
+        public async Task UpdateProject(ProjectForUpdate project, Project oldProject)
         {
-            Project oldProject = db.Projects.FirstOrDefault(p => p.ProjectId == project.ProjectId);
             oldProject.Name = project.Name;
             oldProject.Description = project.Description;
             await db.SaveChangesAsync();           

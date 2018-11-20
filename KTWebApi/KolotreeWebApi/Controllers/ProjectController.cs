@@ -14,6 +14,7 @@ namespace KolotreeWebApi.Controllers
     {
         private readonly ProjectService projectService;
 
+
         public ProjectController(ProjectService _projectService)
         {
             projectService = _projectService;
@@ -23,14 +24,14 @@ namespace KolotreeWebApi.Controllers
 
         // GET: api/Project
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAllProjects()
         {
             return Ok(await projectService.FetchAllProjects());
         }
 
         // GET: api/Project/5
         [HttpGet("{id}", Name = "Get")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetProject(int id)
         {
             Project project = await projectService.FindProject(id);
             if (project == null)
@@ -42,7 +43,7 @@ namespace KolotreeWebApi.Controllers
         
         // POST: api/Project
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Project project)
+        public async Task<IActionResult> CreateProject([FromBody]Project project)
         {
             if (!ModelState.IsValid)
             {
@@ -61,9 +62,10 @@ namespace KolotreeWebApi.Controllers
         
         // PUT: api/Project/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]Project project)
+        public async Task<IActionResult> UpdateProject(int id, [FromBody]ProjectForUpdate project)
         {
-            if (await projectService.FindProject(id) == null)
+            Project oldProject = await projectService.FindProject(id);
+            if ( oldProject == null)
             {
                 return NotFound();
             }
@@ -73,7 +75,7 @@ namespace KolotreeWebApi.Controllers
             }
             try
             {
-                await projectService.UpdateProject(project);
+                await projectService.UpdateProject(project, oldProject);
                 return NoContent();
             }
             catch (Exception xcp)
@@ -81,10 +83,11 @@ namespace KolotreeWebApi.Controllers
                 return StatusCode(500, xcp.Message);
             }
         }
-        
+
+      
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteProject(int id)
         {
             Project project = await projectService.FindProject(id);
             if ( project == null)

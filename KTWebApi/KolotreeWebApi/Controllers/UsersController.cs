@@ -26,7 +26,7 @@ namespace KolotreeWebApi.Controllers
         }
         // GET: api/Users
         [HttpGet(Name = "GetUsers")]       
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
             var resultList =  await userService.FetchAllUsers();            
             return Ok(resultList);            
@@ -47,7 +47,7 @@ namespace KolotreeWebApi.Controllers
         
         // POST: api/Users
         [HttpPost]        
-        public async Task<IActionResult> Post([FromBody]User user)
+        public async Task<IActionResult> CreateUser([FromBody]User user)
         {
             if (!ModelState.IsValid)
             {
@@ -67,9 +67,10 @@ namespace KolotreeWebApi.Controllers
         
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]User user)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody]UserForUpdate user)
         {
-            if (await userService.FindUser(id) == null)
+            User oldUser = await userService.FindUser(id);
+            if (oldUser == null)
             {
                 return NotFound();
             }
@@ -79,7 +80,7 @@ namespace KolotreeWebApi.Controllers
             }
             try
             {
-                userService.UpdateUser(user);
+                userService.UpdateUser(user, oldUser);
                 return NoContent();
             }
             catch (Exception xcp)
@@ -92,7 +93,7 @@ namespace KolotreeWebApi.Controllers
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             User user = await userService.FindUser(id);
             if (user == null)

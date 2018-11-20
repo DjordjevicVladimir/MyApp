@@ -13,7 +13,7 @@ namespace KolotreeWebApi.Models
             HoursRecords = new HashSet<HoursRecord>();
         }
 
-        public int ProjectId { get; set; }
+        public int ProjectId { get; private set; }
         [Required]
         [StringLength(100)]
         public string Name { get; set; }

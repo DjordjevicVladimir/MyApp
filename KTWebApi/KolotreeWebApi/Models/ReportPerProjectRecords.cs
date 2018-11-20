@@ -18,5 +18,6 @@ namespace KolotreeWebApi.Models
             public int SpentHours { get; set; }
             public DateTime DateOfRecord { get; set; }
         }
+
     }
 }

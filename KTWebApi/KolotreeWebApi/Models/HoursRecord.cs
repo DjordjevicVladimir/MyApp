@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KolotreeWebApi.Models
 {
-    [Table("HoursRecord")]
+    [Table("HoursRecords")]
     public partial class HoursRecord
     {
 
-        public int Id { get; set; }
+        public int Id { get; private set; }
         [Required]
         public int ProjectId { get; set; }
         [Required]
@@ -26,10 +26,8 @@ namespace KolotreeWebApi.Models
         [InverseProperty("HoursRecords")]
         public User User { get; set; }
 
-        public HoursRecord(int userId, int projectId)
+        public HoursRecord()
         {
-            UserId = userId;
-            ProjectId = projectId;
             Date = DateTime.Now.Date;
         }
     }

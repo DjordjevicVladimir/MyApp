@@ -34,11 +34,10 @@ namespace KolotreeWebApi.Models
             await db.SaveChangesAsync();                           
         }
 
-        public async void UpdateUser(User user)
-        {
-            User oldUser = await db.Users.FirstOrDefaultAsync(u => u.UserId == user.UserId);          
-            oldUser.UserName = user.UserName;
-            oldUser.FullName = user.FullName;            
+        public async void UpdateUser(UserForUpdate newUser, User oldUser)
+        {                 
+            oldUser.UserName = newUser.UserName;
+            oldUser.FullName = newUser.FullName;            
             await db.SaveChangesAsync();         
        
         }
