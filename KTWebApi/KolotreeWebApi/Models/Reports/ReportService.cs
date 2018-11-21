@@ -66,6 +66,8 @@ namespace KolotreeWebApi.Models.Reports
             UserOnProjectReport report = new UserOnProjectReport();
             report.User = user;
             report.Project = project;
+            report.FromDate = fromDate;
+            report.ToDate = toDate;
             IEnumerable<HoursRecord> hoursRecordsForUserOnProject =
                await hoursRecordService.FindRecordsByUserAndProjectAndDateRange(user, project, fromDate, toDate);
             foreach (var rec in hoursRecordsForUserOnProject)
@@ -155,23 +157,26 @@ namespace KolotreeWebApi.Models.Reports
 
 
         public async Task<UserSpentHoursReport> GetUsersSpentHoursReport(User user, DateTime fromDate, DateTime toDate )
-        {          
-           
-            
+        {     
+                    
             UserSpentHoursReport resultReport = new UserSpentHoursReport();
             resultReport.User = user;
             IEnumerable<HoursRecord> hoursRecordsForUser = 
                 await hoursRecordService.FindRecordsByUserAndDateRange(user, fromDate, toDate);
             foreach (var rec in hoursRecordsForUser)
-            {
-                var record = new UserSpentHoursReport.SpentHoursRecord();
-                record.Project = rec.Project;
+            {             
                 if (rec.SpentHours > 0)
                 {
+                    var record = new UserSpentHoursReport.SpentHoursRecord();
+                    record.Project = rec.Project;
                     record.SpentHours = rec.SpentHours;
-                }
-                record.DateOfRecord = rec.Date;
-                resultReport.spentHoursRecords.Add(record);
+                    record.DateOfRecord = rec.Date;
+                    resultReport.spentHoursRecords.Add(record);
+                }              
+            }
+            if (resultReport.spentHoursRecords == null)
+            {
+                resultReport.spentHoursRecords = new List<UserSpentHoursReport.SpentHoursRecord>();
             }
             resultReport.FromDate = fromDate;
             resultReport.ToDate = toDate;
@@ -188,15 +193,19 @@ namespace KolotreeWebApi.Models.Reports
             IEnumerable<HoursRecord> hoursRecordsForProject =
                 await hoursRecordService.FindRecordsByProjectAndDateRange(project, fromDate, toDate);
             foreach (var rec in hoursRecordsForProject)
-            {
-                var record = new ProjectSpentHoursReport.SpentHoursRecord();
-                record.User = rec.User;
+            {              
                 if (rec.SpentHours > 0)
                 {
+                    var record = new ProjectSpentHoursReport.SpentHoursRecord();
+                    record.User = rec.User;
                     record.SpentHours = rec.SpentHours;
-                }
-                record.DateOfRecord = rec.Date;
-                resultReport.spentHoursRecords.Add(record);
+                    record.DateOfRecord = rec.Date;
+                    resultReport.spentHoursRecords.Add(record);
+                }               
+            }
+            if (resultReport.spentHoursRecords == null)
+            {
+                resultReport.spentHoursRecords = new List<ProjectSpentHoursReport.SpentHoursRecord>();
             }
             resultReport.FromDate = fromDate;
             resultReport.ToDate = toDate;

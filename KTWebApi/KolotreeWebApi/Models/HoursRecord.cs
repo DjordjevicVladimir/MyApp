@@ -24,5 +24,11 @@ namespace KolotreeWebApi.Models
         {
             Date = DateTime.Now.Date;
         }
+
+        public HoursRecord(User user, Project project)
+        {
+            this.User = user;
+            this.Project = project;
+        }
     }
 }

@@ -16,15 +16,9 @@ namespace KolotreeWebApi.Models
         }
 
 
-
         public async Task<List<Project>> FetchAllProjects()
         {
             return await db.Projects.ToListAsync();
-        }
-
-        public Project FindProjectSinh(int id)
-        {
-            return db.Projects.FirstOrDefault(p => p.ProjectId == id);
         }
 
         public async Task<Project> FindProject(int id)

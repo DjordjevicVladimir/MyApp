@@ -26,7 +26,7 @@ namespace KolotreeWebApi.Models
 
         public async Task<HoursRecord> GetRacord(int id)
         {
-           HoursRecord record = await db.HoursRecords.FirstOrDefaultAsync(r => r.Id == id);
+            HoursRecord record = await db.HoursRecords.Include(u => u.User).Include(p => p.Project).FirstOrDefaultAsync(r => r.Id == id);
             return record;
         }
 
@@ -66,14 +66,15 @@ namespace KolotreeWebApi.Models
 
         public async Task<List<HoursRecord>> FindRecordsByUserAndDateRange(User user, DateTime fromDate, DateTime toDate)
         {
-            List<HoursRecord> recordForUserInDateRange = await db.HoursRecords.Where(us => us.User.UserId == user.UserId
+            List<HoursRecord> recordForUserInDateRange = await db.HoursRecords.Include(u => u.User).Include(p => p.Project).Where(us => us.User.UserId == user.UserId
            && us.Date >= fromDate && us.Date <= toDate).ToListAsync();
+
             return recordForUserInDateRange;
         }
 
         public async Task<List<HoursRecord>> FindRecordsByUserAndProjectAndDateRange(User user, Project project, DateTime fromDate, DateTime toDate)
         {
-            List<HoursRecord> resultList = await db.HoursRecords.Where(us => (us.User.UserId == user.UserId)
+            List<HoursRecord> resultList = await db.HoursRecords.Include(u => u.User).Include(p => p.Project).Where(us => (us.User.UserId == user.UserId)
             && (us.Project.ProjectId == project.ProjectId)
             && (us.Date >= fromDate && us.Date <= toDate)).ToListAsync();
             return resultList;
@@ -81,22 +82,22 @@ namespace KolotreeWebApi.Models
 
         public async Task<List<HoursRecord>> FindRecordsByProjectAndDateRange(Project project, DateTime fromDate, DateTime toDate)
         {
-            List<HoursRecord> recordForProjectInDateRange = await db.HoursRecords.Where(us => us.Project.ProjectId == project.ProjectId
+            List<HoursRecord> recordForProjectInDateRange = await db.HoursRecords.Include(u => u.User).Include(p => p.Project).Where(us => us.Project.ProjectId == project.ProjectId
            && us.Date >= fromDate && us.Date <= toDate).ToListAsync();
             return recordForProjectInDateRange;
         }
 
         public async Task<List<HoursRecord>> FindRecordsByDateRange(DateTime fromDate, DateTime toDate)
         {
-            List<HoursRecord> recordsByDateRange = await db.HoursRecords.Where(r => r.Date >= fromDate
+            List<HoursRecord> recordsByDateRange = await db.HoursRecords.Include(u => u.User).Include(p => p.Project).Where(r => r.Date >= fromDate
                 && r.Date <= toDate).ToListAsync();
             return recordsByDateRange;
         }
 
         public async Task<int> CheckAvailableHoursForUserOnProject(User user, Project project)
         {
-            int totalAssignedHours = await db.HoursRecords.Where(r => (r.User == user) && (r.Project == project)).SumAsync(h => h.AssignedHours);
-            int totalSpentHours = await db.HoursRecords.Where(r => (r.User == user) && (r.Project == project)).SumAsync(h => h.SpentHours);
+            int totalAssignedHours = await db.HoursRecords.Include(u => u.User).Include(p => p.Project).Where(r => (r.User == user) && (r.Project == project)).SumAsync(h => h.AssignedHours);
+            int totalSpentHours = await db.HoursRecords.Include(u => u.User).Include(p => p.Project).Where(r => (r.User == user) && (r.Project == project)).SumAsync(h => h.SpentHours);
             int availableHours = totalAssignedHours - totalSpentHours;
             return availableHours;
         }

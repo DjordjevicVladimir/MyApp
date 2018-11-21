@@ -32,7 +32,7 @@ namespace KolotreeWebApi.Controllers
         // GET: api/Report
         [HttpGet]
         [Route("[action]/{userId}/{fromDate?}/{toDate?}")]
-        public async Task<IActionResult> GetReportPerUser(int userId, DateTime? fromDate, DateTime? toDate)
+        public async Task<IActionResult> GetUserReport(int userId, DateTime? fromDate, DateTime? toDate)
         {
             User user = await userService.FindUser(userId);
             if (user == null)
@@ -50,15 +50,122 @@ namespace KolotreeWebApi.Controllers
             return Ok(resultReport);            
         }
 
-        //[HttpGet]
-        //[Route("[action]/{userId}/{projectId}")]
-        //public async Task<IActionResult> GetReportForUserOnProject(int userId, int projectId)
-        //{
-        //    User user = await userService.FindUser(userId);
-        //    Models.Project project = await projectService.FindProject(projectId);
-        //    var result = await reportService.GetReportForUserOnProject(user, project);
-        //    return Ok(project.Name);
-        //}
+
+        [HttpGet]
+        [Route("[action]/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetSumUsersReport(DateTime? fromDate, DateTime? toDate)
+        {
+            DateTime startDate = fromDate ?? new DateTime(2000, 01, 01);
+            DateTime endDate = toDate ?? DateTime.Now;
+            if (startDate > endDate)
+            {
+                return NotFound("Ending date of report has to be greater than starting date");
+            }
+
+            SumUsersReport resultReport = await reportService.GetSumUsersReport(startDate, endDate);
+            return Ok(resultReport);
+        }
+
+
+        [HttpGet]
+        [Route("[action]/{userId}/{projectId}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetReportForUserOnProject(int userId, int projectId, DateTime? fromDate, DateTime? toDate)
+        {
+
+            User user = await userService.FindUser(userId);
+            if (user == null)
+            {
+                return NotFound("Not found user with given ID.");
+            }
+            Project project = await projectService.FindProject(projectId);
+            if (project == null)
+            {
+                return NotFound("Not found project with given id.");
+            }
+            DateTime startDate = fromDate ?? new DateTime(2000, 01, 01);
+            DateTime endDate = toDate ?? DateTime.Now;
+            if (startDate > endDate)
+            {
+                return NotFound("Ending date of report has to be greater than starting date");
+            }
+            var result = await reportService.GetReportForUserOnProject(user, project, startDate, endDate );
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[action]/{userId}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetUsersSpentHoursReport(int userId, DateTime? fromDate, DateTime? toDate)
+        {
+            User user = await userService.FindUser(userId);
+            if (user == null)
+            {
+                return NotFound("Not found user with given ID.");
+            }
+            DateTime startDate = fromDate ?? new DateTime(2000, 01, 01);
+            DateTime endDate = toDate ?? DateTime.Now;
+            if (startDate > endDate)
+            {
+                return NotFound("Ending date of report has to be greater than starting date");
+            }
+            UserSpentHoursReport resultReport = await reportService.GetUsersSpentHoursReport(user, startDate, endDate);
+            return Ok(resultReport);
+        }
+
+        [HttpGet]
+        [Route("[action]/{projectId}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetProjectReport(int projectId, DateTime? fromDate, DateTime? toDate)
+        {
+            Project project = await projectService.FindProject(projectId);
+            if (project == null)
+            {
+                return NotFound("Not found project with given id.");
+            }
+            DateTime startDate = fromDate ?? new DateTime(2000, 01, 01);
+            DateTime endDate = toDate ?? DateTime.Now;
+            if (startDate > endDate)
+            {
+                return NotFound("Ending date of report has to be greater than starting date");
+            }
+            ProjectReport resultReport = await reportService.GetProjectReport(project, startDate, endDate);
+            return Ok(resultReport);
+        }
+
+
+        [HttpGet]
+        [Route("[action]/{projectId}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetProjectSpentHoursReport(int projectId, DateTime? fromDate, DateTime? toDate)
+        {
+            Project project = await projectService.FindProject(projectId);
+            if (project == null)
+            {
+                return NotFound("Not found project with given id.");
+            }
+            DateTime startDate = fromDate ?? new DateTime(2000, 01, 01);
+            DateTime endDate = toDate ?? DateTime.Now;
+            if (startDate > endDate)
+            {
+                return NotFound("Ending date of report has to be greater than starting date");
+            }
+            ProjectSpentHoursReport resultReport = await reportService.GetProjectSpentHoursReport(project, startDate, endDate);
+            return Ok(resultReport);
+        }
+
+        [HttpGet]
+        [Route("[action]/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetSumProjectsReport(DateTime? fromDate, DateTime? toDate)
+        {
+            DateTime startDate = fromDate ?? new DateTime(2000, 01, 01);
+            DateTime endDate = toDate ?? DateTime.Now;
+            if (startDate > endDate)
+            {
+                return NotFound("Ending date of report has to be greater than starting date");
+            }
+
+            SumProjectsReport resultReport = await reportService.GetSumProjectsReport(startDate, endDate);
+            return Ok(resultReport);
+        }
+
+       
 
     }  
 }

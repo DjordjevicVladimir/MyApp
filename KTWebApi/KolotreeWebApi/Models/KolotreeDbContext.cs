@@ -11,7 +11,7 @@ namespace KolotreeWebApi.Models
 
         public KolotreeDbContext(DbContextOptions<KolotreeDbContext> options): base(options)
         {
-
+          
         }
 
         public DbSet<User> Users { get; set; }

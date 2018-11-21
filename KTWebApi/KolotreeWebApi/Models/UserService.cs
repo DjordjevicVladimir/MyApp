@@ -21,12 +21,6 @@ namespace KolotreeWebApi.Models
             return await db.Users.ToListAsync();
         }
 
-        public User FindUserSinh(int id)
-        {
-            return  db.Users.FirstOrDefault(u => u.UserId == id);
-        }
-
-
         public async Task<User> FindUser(int id)
         {
             return await db.Users.FirstOrDefaultAsync(u => u.UserId == id);
