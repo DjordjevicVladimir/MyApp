@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using KolotreeWebApi.Models.Reports;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 
 namespace KolotreeWebApi
@@ -43,7 +45,7 @@ namespace KolotreeWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+                  
             app.UseMvc();
         }
     }

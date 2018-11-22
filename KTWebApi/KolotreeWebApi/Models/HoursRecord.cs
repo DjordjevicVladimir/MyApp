@@ -16,7 +16,7 @@ namespace KolotreeWebApi.Models
         public User User { get; set; }
         public int AssignedHours { get; set; }
         public int SpentHours { get; set; }
-        [DataType(DataType.Date)]   
+        [DataType(DataType.Date)]       
         public DateTime Date { get; private set; }
 
 
