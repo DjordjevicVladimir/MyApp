@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace KolotreeWebApi.Models
 {
@@ -26,6 +28,12 @@ namespace KolotreeWebApi.Models
             return await db.Users.FirstOrDefaultAsync(u => u.UserId == id);
         }
 
+        public async Task<User> FindUserByUserName(string userName)
+        {
+            User user = await db.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+            return user;
+        }
+
 
         public async Task<User> AddUser(UserForManipulation user)
         {
@@ -35,28 +43,23 @@ namespace KolotreeWebApi.Models
             return newUser;
         }
 
-        public async void UpdateUser(UserForManipulation newUser, User oldUser)
+        public async Task UpdateUser(UserForManipulation newUser, User oldUser)
         {
             oldUser.UserName = newUser.UserName;
             oldUser.FullName = newUser.FullName;
-            await db.SaveChangesAsync();
-
+            await db.SaveChangesAsync();        
         }
 
-        public async Task DeleteUser(User user)
+        public async Task<bool> DeleteUser(User user)
         {
+            if (await db.HoursRecords.AnyAsync(u => u.User.UserId == user.UserId))
+            {
+                return false;
+            }
 
-            //List<HoursRecord> hoursRecords = db.HoursRecords.ToList();
-            //if (hoursRecords != null)
-            //{
-            //    foreach (var record in hoursRecords)
-            //    {
-            //        db.HoursRecords.Remove(record);
-            //    }
-            //}
-
-            //db.Users.Remove(user);
-            //await db.SaveChangesAsync();
+            db.Users.Remove(user);
+            await db.SaveChangesAsync();
+            return true;
         }
     }
 }

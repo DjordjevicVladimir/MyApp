@@ -49,17 +49,16 @@ namespace KolotreeWebApi.Controllers
             return formatCheck;
         }
 
-
-
-        // GET: api/Report
-        [HttpGet]
-        [Route("[action]/{userId}/{fromDate?}/{toDate?}")]
-        public async Task<IActionResult> GetUserReport(int userId, string fromDate = "", string toDate = "")
+       
+        private async Task<IActionResult> GetReportForUserOnProject(User user, Project project, string fromDate = "", string toDate = "")
         {
-            User user = await userService.FindUser(userId);
             if (user == null)
             {
-                return NotFound("Not found user with given ID.");
+                return NotFound("User not found.");
+            }
+            if (project == null)
+            {
+                return NotFound("Project not found.");
             }
             DateTime startDate;
             bool fromDateCheck = ValidateStartDate(fromDate, out startDate);
@@ -67,16 +66,61 @@ namespace KolotreeWebApi.Controllers
             bool toDateCheck = ValidateEndDate(toDate, out endDate);
             if (fromDateCheck == false || toDateCheck == false)
             {
-                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd, MM-dd-yyyy, dd-MM-yyyy.");
+                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd and dd-MM-yyyy.");
             }
             if (startDate > endDate)
             {
                 return BadRequest("Ending date of report has to be greater than starting date");
             }
-
-            UserReport resultReport = await reportService.GetUserReport(user, startDate, endDate);      
-            return Ok(resultReport);            
+            var result = await reportService.GetReportForUserOnProject(user, project, startDate, endDate);
+            return Ok(result);
         }
+
+        private async Task<IActionResult> GetUserReport(User user, string fromDate = "", string toDate = "")
+        {
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            DateTime startDate;
+            bool fromDateCheck = ValidateStartDate(fromDate, out startDate);
+            DateTime endDate;
+            bool toDateCheck = ValidateEndDate(toDate, out endDate);
+            if (fromDateCheck == false || toDateCheck == false)
+            {
+                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd and dd-MM-yyyy.");
+            }
+            if (startDate > endDate)
+            {
+                return BadRequest("Invalid date range.");
+            }
+
+            UserReport resultReport = await reportService.GetUserReport(user, startDate, endDate);
+            return Ok(resultReport);
+        }
+
+
+       
+
+
+        // GET: api/Report
+        [HttpGet]
+        [Route("[action]/{userId}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetUserReportByUserId(int userId, string fromDate = "", string toDate = "")
+        {
+            User user = await userService.FindUser(userId);
+            return await GetUserReport(user, fromDate, toDate);
+        }
+
+
+        [HttpGet]
+        [Route("[action]/{userName}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetUserReportByUserName(string userName, string fromDate = "", string toDate = "")
+        {
+            User user = await userService.FindUserByUserName(userName);
+            return await GetUserReport(user, fromDate, toDate);
+        }
+
 
 
         [HttpGet]
@@ -89,11 +133,11 @@ namespace KolotreeWebApi.Controllers
             bool toDateCheck = ValidateEndDate(toDate, out endDate);
             if (fromDateCheck == false || toDateCheck == false)
             {
-                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd, MM-dd-yyyy, dd-MM-yyyy.");
+                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd and dd-MM-yyyy.");
             }
             if (startDate > endDate)
             {
-                return BadRequest("Ending date of report has to be greater than starting date");
+                return BadRequest("Invalid date range.");
             }
 
             SumUsersReport resultReport = await reportService.GetSumUsersReport(startDate, endDate);
@@ -103,69 +147,70 @@ namespace KolotreeWebApi.Controllers
 
         [HttpGet]
         [Route("[action]/{userId}/{projectId}/{fromDate?}/{toDate?}")]
-        public async Task<IActionResult> GetReportForUserOnProject(int userId, int projectId, string fromDate= "", string toDate = "")
+        public async Task<IActionResult> GetReportForUserOnProjectById(int userId, int projectId, string fromDate= "", string toDate = "")
         {
 
-            User user = await userService.FindUser(userId);
+            User user = await userService.FindUser(userId);            
+            Project project = await projectService.FindProject(projectId);
+            return await GetReportForUserOnProject(user, project, fromDate, toDate);
+        }
+
+
+        [HttpGet]
+        [Route("[action]/{userName}/{projectName}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetReportForUserOnProjectByNames(string userName, string projectName, string fromDate = "", string toDate = "")
+        {
+
+            User user = await userService.FindUserByUserName(userName);
+            Project project = await projectService.FindProjectByName(projectName);
+            return await GetReportForUserOnProject(user, project, fromDate, toDate);
+        }
+
+        private async Task<IActionResult> GetUsersSpentHoursReport(User user, string fromDate = "", string toDate = "")
+        {
             if (user == null)
             {
-                return NotFound("Not found user with given ID.");
-            }
-            Project project = await projectService.FindProject(projectId);
-            if (project == null)
-            {
-                return NotFound("Not found project with given id.");
+                return NotFound("User not found");
             }
             DateTime startDate;
             bool fromDateCheck = ValidateStartDate(fromDate, out startDate);
-            DateTime endDate;
-            bool toDateCheck = ValidateEndDate(toDate, out endDate);
-            if (fromDateCheck == false || toDateCheck == false)
-            {
-                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd, MM-dd-yyyy, dd-MM-yyyy.");
-            }
-            if (startDate > endDate)
-            {
-                return BadRequest("Ending date of report has to be greater than starting date");
-            }
-            var result = await reportService.GetReportForUserOnProject(user, project, startDate, endDate );
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Route("[action]/{userId}/{fromDate?}/{toDate?}")]
-        [FormatFilter()]
-        public async Task<IActionResult> GetUsersSpentHoursReport(int userId, string fromDate= "", string toDate= "")
-        {
-            User user = await userService.FindUser(userId);
-            if (user == null)
-            {
-                return NotFound("Not found user with given ID.");
-            }
-            DateTime startDate;
-            bool fromDateCheck = ValidateStartDate(fromDate, out startDate);            
             DateTime endDate;
             bool toDateCheck = ValidateEndDate(toDate, out endDate);
             if (!fromDateCheck || !toDateCheck)
             {
-                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd, MM-dd-yyyy, dd-MM-yyyy.");
+                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd and dd-MM-yyyy.");
             }
             if (startDate > endDate)
             {
-                return BadRequest("Ending date of report has to be greater than starting date");
+                return BadRequest("Invalid date range.");
             }
             UserSpentHoursReport resultReport = await reportService.GetUsersSpentHoursReport(user, startDate, endDate);
             return Ok(resultReport);
+
         }
 
         [HttpGet]
-        [Route("[action]/{projectId}/{fromDate?}/{toDate?}")]
-        public async Task<IActionResult> GetProjectReport(int projectId, string fromDate = "", string toDate = "")
+        [Route("[action]/{userId}/{fromDate?}/{toDate?}")]        
+        public async Task<IActionResult> GetUsersSpentHoursReportByUserId(int userId, string fromDate= "", string toDate= "")
         {
-            Project project = await projectService.FindProject(projectId);
+            User user = await userService.FindUser(userId);
+            return await GetUsersSpentHoursReport(user, fromDate, toDate);
+        }
+
+        [HttpGet]
+        [Route("[action]/{userName}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetUsersSpentHoursReportByUserName(string userName, string fromDate = "", string toDate = "")
+        {
+            User user = await userService.FindUserByUserName(userName);
+            return await GetUsersSpentHoursReport(user, fromDate, toDate);
+        }
+
+
+        private async Task<IActionResult> GetProjectReport(Project project, string fromDate = "", string toDate = "")
+        {
             if (project == null)
             {
-                return NotFound("Not found project with given id.");
+                return NotFound("Project not found.");
             }
             DateTime startDate;
             bool fromDateCheck = ValidateStartDate(fromDate, out startDate);
@@ -173,11 +218,11 @@ namespace KolotreeWebApi.Controllers
             bool toDateCheck = ValidateEndDate(toDate, out endDate);
             if (fromDateCheck == false || toDateCheck == false)
             {
-                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd, MM-dd-yyyy, dd-MM-yyyy.");
+                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd and dd-MM-yyyy.");
             }
             if (startDate > endDate)
             {
-                return BadRequest("Ending date of report has to be greater than starting date");
+                return BadRequest("Invalid date range.");
             }
             ProjectReport resultReport = await reportService.GetProjectReport(project, startDate, endDate);
             return Ok(resultReport);
@@ -186,12 +231,27 @@ namespace KolotreeWebApi.Controllers
 
         [HttpGet]
         [Route("[action]/{projectId}/{fromDate?}/{toDate?}")]
-        public async Task<IActionResult> GetProjectSpentHoursReport(int projectId, string fromDate = "", string toDate = "")
+        public async Task<IActionResult> GetProjectReportByProjectId(int projectId, string fromDate = "", string toDate = "")
         {
             Project project = await projectService.FindProject(projectId);
+            return await GetProjectReport(project, fromDate, toDate);
+        }
+
+
+        [HttpGet]
+        [Route("[action]/{projectName}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetProjectReportByProjectName(string projectName, string fromDate = "", string toDate = "")
+        {
+            Project project = await projectService.FindProjectByName(projectName);
+            return await GetProjectReport(project, fromDate, toDate);
+        }
+
+
+        private async Task<IActionResult> GetProjectSpentHoursReport(Project project, string fromDate = "", string toDate = "")
+        {
             if (project == null)
             {
-                return NotFound("Not found project with given id.");
+                return NotFound("Project not found.");
             }
             DateTime startDate;
             bool fromDateCheck = ValidateStartDate(fromDate, out startDate);
@@ -199,15 +259,36 @@ namespace KolotreeWebApi.Controllers
             bool toDateCheck = ValidateEndDate(toDate, out endDate);
             if (fromDateCheck == false || toDateCheck == false)
             {
-                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd, MM-dd-yyyy, dd-MM-yyyy.");
+                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd and dd-MM-yyyy.");
             }
             if (startDate > endDate)
             {
-                return BadRequest("Ending date of report has to be greater than starting date");
+                return BadRequest("Invalid date range.");
             }
             ProjectSpentHoursReport resultReport = await reportService.GetProjectSpentHoursReport(project, startDate, endDate);
             return Ok(resultReport);
         }
+
+
+        [HttpGet]
+        [Route("[action]/{projectId}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetProjectSpentHoursReportByProjecId(int projectId, string fromDate = "", string toDate = "")
+        {
+            Project project = await projectService.FindProject(projectId);
+            return await GetProjectSpentHoursReport(project, fromDate, toDate);
+        }
+
+
+
+        [HttpGet]
+        [Route("[action]/{projectName}/{fromDate?}/{toDate?}")]
+        public async Task<IActionResult> GetProjectSpentHoursReportByProjectName(string projectName, string fromDate = "", string toDate = "")
+        {
+            Project project = await projectService.FindProjectByName(projectName);
+            return await GetProjectSpentHoursReport(project, fromDate, toDate);
+        }
+
+
 
         [HttpGet]
         [Route("[action]/{fromDate?}/{toDate?}")]
@@ -219,11 +300,11 @@ namespace KolotreeWebApi.Controllers
             bool toDateCheck = ValidateEndDate(toDate, out endDate);
             if (fromDateCheck == false || toDateCheck == false)
             {
-                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd, MM-dd-yyyy, dd-MM-yyyy.");
+                return BadRequest("Invalid date format. Acceptable formats are yyyy-MM-dd and dd-MM-yyyy.");
             }
             if (startDate > endDate)
             {
-                return BadRequest("Ending date of report has to be greater than starting date");
+                return BadRequest("Invalid date range.");
             }
 
             SumProjectsReport resultReport = await reportService.GetSumProjectsReport(startDate, endDate);

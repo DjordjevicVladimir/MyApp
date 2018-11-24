@@ -49,6 +49,11 @@ namespace KolotreeWebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+            if (await projectService.FindProjectByName(project.Name) != null)
+            {
+                ModelState.AddModelError("Name", "Project name already exist.");
+                return BadRequest(ModelState);
+            }
             try
             {
                 Project newProject = await projectService.AddProject(project);
@@ -56,7 +61,7 @@ namespace KolotreeWebApi.Controllers
             }
             catch (Exception xcp)
             {
-                return StatusCode(500, xcp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }
         }
         
@@ -73,6 +78,14 @@ namespace KolotreeWebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+            if (oldProject.Name != project.Name)
+            {
+                if (await projectService.FindProjectByName(project.Name) != null)
+                {
+                    ModelState.AddModelError("Name", "Project name already exist.");
+                    return BadRequest(ModelState);
+                }
+            }           
             try
             {
                 await projectService.UpdateProject(project, oldProject);
@@ -80,7 +93,7 @@ namespace KolotreeWebApi.Controllers
             }
             catch (Exception xcp)
             {
-                return StatusCode(500, xcp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }
         }
 
@@ -96,12 +109,15 @@ namespace KolotreeWebApi.Controllers
             }
             try
             {
-                await projectService.DeleteProject(project);
-                return NoContent();
+                if (await projectService.DeleteProject(project))
+                {
+                    return NoContent();
+                }
+                return BadRequest("Deletion is not allowed.");
             }
-            catch (Exception scp)
+            catch (Exception xcp)
             {
-                return StatusCode(500, scp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }
         }
     }

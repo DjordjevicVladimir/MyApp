@@ -24,7 +24,7 @@ namespace KolotreeWebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        private async Task<IActionResult> Get(int id)
         {
             HoursRecord record = await hoursRecordService.GetRacord(id);
             if (record == null)
@@ -62,7 +62,7 @@ namespace KolotreeWebApi.Controllers
             }
             catch (Exception xcp)
             {
-                return StatusCode(500, xcp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }
             
         }
@@ -93,7 +93,7 @@ namespace KolotreeWebApi.Controllers
             }
             catch (Exception xcp)
             {
-                return StatusCode(500, xcp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }
         }
 
@@ -127,7 +127,7 @@ namespace KolotreeWebApi.Controllers
             }
             catch (Exception xcp)
             {
-                return StatusCode(500, xcp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }
         }
 

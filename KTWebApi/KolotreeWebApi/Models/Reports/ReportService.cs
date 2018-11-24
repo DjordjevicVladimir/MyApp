@@ -163,8 +163,9 @@ namespace KolotreeWebApi.Models.Reports
             resultReport.User = user;
             IEnumerable<HoursRecord> hoursRecordsForUser = 
                 await hoursRecordService.FindRecordsByUserAndDateRange(user, fromDate, toDate);
+            resultReport.spentHoursRecords = new List<UserSpentHoursReport.SpentHoursRecord>();
             foreach (var rec in hoursRecordsForUser)
-            {             
+            {
                 if (rec.SpentHours > 0)
                 {
                     var record = new UserSpentHoursReport.SpentHoursRecord();
@@ -173,11 +174,7 @@ namespace KolotreeWebApi.Models.Reports
                     record.DateOfRecord = rec.Date;
                     resultReport.spentHoursRecords.Add(record);
                 }              
-            }
-            if (resultReport.spentHoursRecords == null)
-            {
-                resultReport.spentHoursRecords = new List<UserSpentHoursReport.SpentHoursRecord>();
-            }
+            }            
             resultReport.FromDate = fromDate;
             resultReport.ToDate = toDate;
             return resultReport;
@@ -189,9 +186,10 @@ namespace KolotreeWebApi.Models.Reports
            
             ProjectSpentHoursReport resultReport = new ProjectSpentHoursReport();
             resultReport.Project = project;
-
+            resultReport.spentHoursRecords = new List<ProjectSpentHoursReport.SpentHoursRecord>();
             IEnumerable<HoursRecord> hoursRecordsForProject =
                 await hoursRecordService.FindRecordsByProjectAndDateRange(project, fromDate, toDate);
+            
             foreach (var rec in hoursRecordsForProject)
             {              
                 if (rec.SpentHours > 0)
@@ -202,11 +200,7 @@ namespace KolotreeWebApi.Models.Reports
                     record.DateOfRecord = rec.Date;
                     resultReport.spentHoursRecords.Add(record);
                 }               
-            }
-            if (resultReport.spentHoursRecords == null)
-            {
-                resultReport.spentHoursRecords = new List<ProjectSpentHoursReport.SpentHoursRecord>();
-            }
+            }           
             resultReport.FromDate = fromDate;
             resultReport.ToDate = toDate;
             return resultReport;

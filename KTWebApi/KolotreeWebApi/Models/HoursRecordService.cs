@@ -63,7 +63,7 @@ namespace KolotreeWebApi.Models
             await db.SaveChangesAsync();
             return record;
         }
-
+               
         public async Task<List<HoursRecord>> FindRecordsByUserAndDateRange(User user, DateTime fromDate, DateTime toDate)
         {
             List<HoursRecord> recordForUserInDateRange = await db.HoursRecords.Include(u => u.User).Include(p => p.Project).Where(us => us.User.UserId == user.UserId

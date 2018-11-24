@@ -15,7 +15,10 @@ namespace KolotreeWebApi.Models
             db = _db;
         }
 
-
+        public async Task<Project> FindProjectByName(string name)
+        {
+            return await db.Projects.FirstOrDefaultAsync(p => p.Name == name);
+        }
         public async Task<List<Project>> FetchAllProjects()
         {
             return await db.Projects.ToListAsync();
@@ -45,11 +48,15 @@ namespace KolotreeWebApi.Models
         }
 
 
-        public async Task DeleteProject(Project project)
+        public async Task<bool> DeleteProject(Project project)
         {
-            //db.Projects.Remove(project);
-            //await db.SaveChangesAsync();
-
+            if (await db.HoursRecords.AnyAsync(p => p.Project.ProjectId == project.ProjectId))
+            {
+                return false;
+            }
+            db.Projects.Remove(project);
+            await db.SaveChangesAsync();
+            return true;
         }
     }
 }

@@ -13,13 +13,13 @@ using Newtonsoft.Json;
 namespace KolotreeWebApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Users")]
-    public class UsersController : Controller
+    [Route("api/User")]
+    public class UserController : Controller
     {
         private readonly UserService userService;
        
 
-        public UsersController(UserService _userService)
+        public UserController(UserService _userService)
         {
      
             userService = _userService;
@@ -53,6 +53,11 @@ namespace KolotreeWebApi.Controllers
             {
                 return  BadRequest(ModelState);          
             }
+            if (await userService.FindUserByUserName(user.UserName) != null)
+            {
+                ModelState.AddModelError("UserName", "User name already exist.");
+                return BadRequest(ModelState);
+            }
             try
             {
                 User newUser = await userService.AddUser(user);
@@ -60,7 +65,7 @@ namespace KolotreeWebApi.Controllers
             }
             catch (Exception xcp)
             {
-                return StatusCode(500, xcp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }
 
         }
@@ -78,14 +83,22 @@ namespace KolotreeWebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+            if (oldUser.UserName != user.UserName)
+            {
+                if (await userService.FindUserByUserName(user.UserName) != null)
+                {
+                    ModelState.AddModelError("UserName", "User name already exist.");
+                    return BadRequest(ModelState);
+                }
+            }          
             try
             {
-                userService.UpdateUser(user, oldUser);
+                await userService.UpdateUser(user, oldUser);
                 return NoContent();
             }
             catch (Exception xcp)
             {
-                return StatusCode(500, xcp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }          
             
         }
@@ -102,12 +115,16 @@ namespace KolotreeWebApi.Controllers
             }
             try
             {
-                await userService.DeleteUser(user);
-                return NoContent();
+                if (await userService.DeleteUser(user))
+                {
+                    return NoContent();
+                }
+                return BadRequest("Deletion is not allowed.");
+
             }
             catch (Exception xcp)
             {
-                return StatusCode(500, xcp.Message);
+                return StatusCode(500, xcp.InnerException.Message);
             }
         }
     }
